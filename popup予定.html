@@ -19,9 +19,19 @@
             min-height: 100vh; color: #333; display: flex; align-items: center; justify-content: center; padding: 20px;
         }
         .container {
-            width: 1200px; height: 850px; background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            overflow: hidden; display: flex; flex-direction: column;
+            width: 1200px;
+            height: 850px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: auto;
+            display: flex;
+            flex-direction: column;
+            resize: both;
+            min-width: 1000px;
+            min-height: 850px;
+            max-width: 100vw;
+            max-height: 100vh;
         }
         .header { background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; padding: 16px 20px; flex-shrink: 0; }
         .header h1 { font-size: 18px; font-weight: 600; }
@@ -33,12 +43,35 @@
         .tab-content.active { display: flex; }
         .btn { padding: 10px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 13px; border: none; }
         .btn-sm { padding: 6px 12px; font-size: 12px; }
-        .btn-primary { background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%); color: white; }
         .btn-secondary { background: white; color: var(--primary-color); border: 2px solid var(--primary-color); }
         .btn-secondary:hover { background: var(--primary-color); color: white; }
         .btn-secondary.active { background: var(--primary-color); color: white; }
         .btn-danger { background: white; color: var(--danger-color); border: 2px solid var(--danger-color); }
         .btn-danger:hover { background: var(--danger-color); color: white; }
+        .export-btn {
+            padding: 12px 16px;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 14px;
+                /* アニメーション完全削除 */
+        }
+        .export-btn.import-label:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+        }
+        .export-btn.export-button:hover {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        .export-btn.reset-button:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+        }
         .form-group { margin-bottom: 16px; }
         .form-label { display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 13px; }
         .form-input, .form-textarea, .form-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; background: white; }
@@ -62,7 +95,7 @@
         .prompt-part-main { flex: 1; }
         .add-btn { width: 22px; height: 22px; border: none; background: var(--primary-color); color: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 16px; flex-shrink: 0; }
         .add-btn.selected { background: #f59e0b; color: #fff; }
-        .add-btn .icon-minus {
+        .add-btn .icon-plus {
             width: 16px;
             height: 16px;
             display: block;
@@ -73,11 +106,27 @@
         .translation-display { background: #fafafa; border-radius: 8px; border: 1px solid var(--border-color); padding: 16px; margin-bottom: 16px; flex: 2; display: flex; flex-direction: column; }
         .translation-input { width: 100%; height: 100%; border: none; outline: none; font-size: 13px; line-height: 1.5; resize: none; background: transparent; color: #64748b; }
         .prompt-actions { display: flex; gap: 8px; }
-        .parts-content { display: flex; gap: 0; height: 100%; }
+        .parts-content {
+            display: flex;
+            gap: 0;
+            height: 100%;
+            width: 100%;
+            max-width: 100%;
+        }
         .parts-section { background: var(--background-light); border-radius: 0; padding: 20px; border-right: 1px solid var(--border-color); display: flex; flex-direction: column; min-width: 0; }
         .parts-section.category-mgmt { flex: 0 0 350px; }
         .parts-section.part-edit { flex: 0 0 350px; max-width: 350px; }
-        .parts-main { flex: 1; background: white; padding: 20px; min-width: 0; display: flex; flex-direction: column; height: 100%; }
+        .parts-main {
+            flex: 1;
+            background: white;
+            padding: 20px;
+            min-width: 0;      /* 親要素の幅に合わせて可変 */
+            width: 100%;       /* 親要素の幅いっぱい */
+            max-width: 100%;   /* 親要素の幅を超えない */
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
         .section-title { font-size: 18px; font-weight: 600; color: #1e293b; margin-bottom: 16px; }
         .card { background: white; border-radius: 8px; padding: 12px; border: 1px solid var(--border-color); margin-bottom: 12px; display: flex; gap: 8px; align-items: flex-start; width: 100%; position: relative; }
         .category-scroll-area { flex: 1; overflow-y: auto; padding-right: 8px; }
@@ -88,9 +137,23 @@
         .category-reorder-item.dragging { opacity: 0.5; }
         .drag-handle { cursor: grab; color: #94a3b8; }
         .category-name { flex: 1; }
-        .templates-container { display: flex; height: 100%; gap: 0; }
+        .templates-container {
+            display: flex;
+            height: 100%;
+            gap: 0;
+            width: 100%;
+            max-width: 100%;
+        }
         .template-edit-panel { flex: 0 0 400px; max-width: 400px; background: var(--background-light); border-radius: 0; padding: 20px; border-right: 1px solid var(--border-color); min-width: 0; display: flex; flex-direction: column; }
-        .template-list-panel { width: 800px; min-width: 0; background: white; display: flex; flex-direction: column; }
+                .template-list-panel {
+                    flex: 1;
+                    min-width: 0;
+                    width: 100%;
+                    max-width: 100%;
+                    background: white;
+                    display: flex;
+                    flex-direction: column;
+                }
         .template-search-fixed { padding: 16px 20px 0 20px; flex-shrink: 0; background: white; border-bottom: 1px solid var(--border-color); }
         .template-list-scroll { flex: 1; overflow-y: auto; padding: 20px; }
         .template-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
@@ -105,7 +168,7 @@
         .export-button { background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%); }
         .reset-button { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); }
         .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .image-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 1001; cursor: pointer; }
+    .image-modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: transparent; display: none; align-items: center; justify-content: center; z-index: 1001; cursor: pointer; }
         .image-modal img { max-width: 90vw; max-height: 90vh; object-fit: contain; border-radius: 8px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
         .modal-content { background: white; border-radius: 12px; padding: 24px; width: 90%; max-width: 700px; height: 80%; display: flex; flex-direction: column; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
@@ -133,6 +196,57 @@
         .json-add-form { display: flex; gap: 8px; margin-bottom: 12px; }
         .storage-warning { background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; padding: 12px; border-radius: 6px; font-size: 12px; margin-bottom: 16px; }
     </style>
+    <script>
+    // Chrome拡張APIが使えない場合はlocalStorageにフォールバック
+    const storage = (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local)
+        ? {
+            get: (keys, cb) => chrome.storage.local.get(keys, cb),
+            set: (items, cb) => chrome.storage.local.set(items, cb),
+            remove: (keys, cb) => chrome.storage.local.remove(keys, cb)
+        }
+        : {
+            get: (keys, cb) => {
+                let result = {};
+                if (Array.isArray(keys)) {
+                    keys.forEach(k => { result[k] = localStorage.getItem(k); });
+                } else if (typeof keys === 'string') {
+                    result[keys] = localStorage.getItem(keys);
+                } else if (typeof keys === 'object') {
+                    Object.keys(keys).forEach(k => { result[k] = localStorage.getItem(k); });
+                }
+                cb(result);
+            },
+            set: (items, cb) => {
+                Object.keys(items).forEach(k => localStorage.setItem(k, items[k]));
+                if (cb) cb();
+            },
+            remove: (keys, cb) => {
+                if (Array.isArray(keys)) {
+                    keys.forEach(k => localStorage.removeItem(k));
+                } else if (typeof keys === 'string') {
+                    localStorage.removeItem(keys);
+                }
+                if (cb) cb();
+            }
+        };
+    document.addEventListener('DOMContentLoaded', function () {
+        const container = document.querySelector('.container');
+        if (container) {
+            container.addEventListener('dblclick', function (e) {
+                // 右下角付近のみ反応
+                const rect = container.getBoundingClientRect();
+                const threshold = 32; // 32px以内
+                if (
+                    e.clientX >= rect.right - threshold &&
+                    e.clientY >= rect.bottom - threshold
+                ) {
+                    container.style.width = '1200px';
+                    container.style.height = '850px';
+                }
+            });
+        }
+    });
+    </script>
 </head>
 <body>
     <div class="container">
@@ -161,9 +275,15 @@
                             <textarea class="translation-input" id="translation-input" placeholder="追加したパーツの翻訳、または自動翻訳結果が表示されます"></textarea>
                         </div>
                         <div class="prompt-actions">
-                            <button class="btn btn-danger" id="clear-prompt-btn">クリア</button>
-                            <button class="btn btn-secondary" id="save-template-btn">テンプレートとして保存</button>
-                            <button class="btn btn-primary" id="copy-prompt-btn">クリップボードにコピー</button>
+                            <div style="display: flex; align-items: center; width: 100%; gap: 16px;">
+                                <button class="btn btn-danger" id="clear-prompt-btn">クリア</button>
+                                <button class="btn btn-secondary" id="save-template-btn">テンプレートとして保存</button>
+                                <button class="btn btn-primary" id="copy-prompt-btn">クリップボードにコピー</button>
+                                <div id="creation-thumbnail-zone" style="margin-left: auto;">
+                                    <div class="thumbnail-preview" id="creation-thumbnail-preview" style="width:60px; height:40px; border:2px dashed var(--border-color); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#9ca3af; cursor:pointer; background-size:cover; background-position:center; background-repeat:no-repeat; font-size:11px;">サムネ</div>
+                                    <input type="file" id="creation-thumbnail-upload" accept="image/*" style="display:none;" />
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -180,7 +300,7 @@
                     <div class="parts-section part-edit">
                         <h3 class="section-title" id="parts-form-title">パーツを追加</h3>
                         <input type="hidden" id="editing-part-id">
-                        <button class="btn btn-primary btn-sm" id="submit-part-btn" style="width: 100%; margin-bottom: 16px;">パーツを追加</button>
+                        <button class="btn btn-primary" id="submit-part-btn" style="width:100%; margin-bottom:16px; height:48px;">パーツを追加</button>
                         <div class="form-group"><label class="form-label">プロンプト</label><textarea id="new-part-en" class="form-textarea"></textarea></div>
                         <div class="form-group"><label class="form-label">翻訳文 (オプション)</label><textarea id="new-part-ja" class="form-textarea" style="min-height: 60px;"></textarea></div>
                         <div class="form-group"><label class="form-label">カテゴリ</label><select id="new-part-category" class="form-select"></select></div>
@@ -229,43 +349,55 @@
                 <div class="settings-section">
                     <div id="storage-warning" class="storage-warning" style="display: none;"></div>
 
-                    <h3 class="section-title" style="margin-bottom:20px;">🌐 翻訳API</h3>
-                    <div class="form-group">
-                        <label class="form-label">自動翻訳 API URL</label>
-                        <div class="api-settings-group" style="display:flex; gap:8px;">
-                            <input type="text" id="translation-api-url-input" class="form-input" placeholder="例: https://libretranslate.de/translate" style="flex:1;">
-                            <button class="btn btn-secondary btn-sm" id="test-api-btn">テスト</button>
-                            <button class="btn btn-primary btn-sm" id="save-api-btn">登録</button>
-                        </div>
-                        <div id="api-test-result" style="margin-top: 8px; font-size: 12px;"></div>
-                    </div>
-
-                    <hr style="margin: 24px 0; border: none; border-top: 1px solid var(--border-color);" />
-
-                    <h3 class="section-title" style="margin-bottom:20px;">📁 データ切り替え（JSON）</h3>
-                    <div class="json-management">
-                        <div class="json-add-form">
-                            <input type="text" id="new-json-name-input" class="form-input" placeholder="新しい設定名" style="flex: 1;" />
-                            <button class="btn btn-primary btn-sm" id="save-current-json-btn">現在の設定を保存</button>
-                        </div>
-                        <div class="json-list" id="json-list"></div>
-                        <div style="display: flex; gap: 8px;">
-                            <button class="btn btn-secondary btn-sm" id="duplicate-json-btn" style="flex: 1;">複製</button>
-                            <button class="btn btn-secondary btn-sm" id="rename-json-btn" style="flex: 1;">名前変更</button>
+                    <!-- 上段フルワイド: 翻訳API -->
+                    <div style="margin-bottom: 24px;">
+                        <h3 class="section-title" style="margin-bottom:20px;">🌐 翻訳API</h3>
+                        <div class="form-group">
+                            <label class="form-label">自動翻訳 API URL</label>
+                            <div class="api-settings-group" style="display:flex; gap:8px;">
+                                <input type="text" id="translation-api-url-input" class="form-input" placeholder="例: https://libretranslate.de/translate" style="flex:1;">
+                                <button class="btn btn-secondary btn-sm" id="test-api-btn">テスト</button>
+                                <button class="btn btn-primary btn-sm" id="save-api-btn">登録</button>
+                            </div>
+                            <div id="api-test-result" style="margin-top: 8px; font-size: 12px;"></div>
                         </div>
                     </div>
 
-                    <hr style="margin: 24px 0; border: none; border-top: 1px solid var(--border-color);" />
+                    <!-- 下段2カラム -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                        
+                        <!-- 左カラム: データ切り替え -->
+                        <div style="background: var(--card-bg, #fff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 20px;">
+                            <h3 class="section-title" style="margin-bottom:20px;">📁 データセット切り替え</h3>
+                            <div class="json-management">
+                                <div class="json-add-form" style="display: flex; gap: 8px; margin-bottom: 12px;">
+                                    <input type="text" id="new-json-name-input" class="form-input" placeholder="新しい設定名" style="flex: 1;" />
+                                    <button class="btn btn-primary btn-sm" id="save-current-json-btn" style="white-space: nowrap;">現在の設定を保存</button>
+                                </div>
+                                <div class="json-list" id="json-list" style="max-height: 300px; overflow-y: auto; margin: 16px 0;"></div>
+                                <div style="display: flex; gap: 8px;">
+                                    <button class="btn btn-secondary btn-sm" id="duplicate-json-btn" style="flex: 1;">複製</button>
+                                    <button class="btn btn-secondary btn-sm" id="rename-json-btn" style="flex: 1;">名前変更</button>
+                                </div>
+                            </div>
+                        </div>
 
-                    <h3 class="section-title" style="margin-bottom:20px;">💾 データ操作</h3>
-                    <div style="display: flex; gap: 12px; margin-bottom: 12px;">
-                        <label class="export-btn import-label" style="flex: 1;">
-                            <input type="file" accept=".json" id="import-data-input" style="display: none;" />📥 インポート
-                        </label>
-                        <button class="export-btn export-button" id="export-data-btn" style="flex: 1;">📤 エクスポート</button>
+                        <!-- 右カラム: データ操作 -->
+                        <div style="background: var(--card-bg, #fff); border: 1px solid var(--border-color, #e0e0e0); border-radius: 8px; padding: 20px;">
+                            <h3 class="section-title" style="margin-bottom:20px;">💾 データ操作</h3>
+                            <button class="btn btn-secondary" id="edit-raw-data-btn" style="width: 100%; margin-bottom: 12px;">現在のデータセットを直接編集(JSON)</button>
+                            <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                                <label class="export-btn import-label" style="flex: 1;">
+                                    <input type="file" accept=".json" id="import-data-input" style="display: none;" />📥 インポート
+                                </label>
+                                <button class="export-btn export-button" id="export-data-btn" style="flex: 1;">📤 エクスポート</button>
+                            </div>
+                            <div style="display: flex; justify-content: flex-end; width: 100%;">
+                                <button class="export-btn reset-button" id="reset-data-btn" style="width: auto;">⚠️ データ初期化</button>
+                            </div>
+                        </div>
+
                     </div>
-                    <button class="btn btn-secondary" id="edit-raw-data-btn" style="width: 100%; margin-bottom: 12px;">保存内容を編集 (JSON)</button>
-                    <button class="export-btn reset-button" id="reset-data-btn" style="width: 100%;">⚠️ データ初期化</button>
                 </div>
             </div>
         </div>
@@ -274,7 +406,7 @@
     <div id="data-editor-modal" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="section-title">保存データの直接編集</h3>
+                <h3 class="section-title">設定、カテゴリ、パーツ、テンプレート（サムネイル画像含む）</h3>
                 <button id="close-data-editor-btn" class="btn-sm btn-danger">&times;</button>
             </div>
             <div class="modal-body">
@@ -287,8 +419,8 @@
         </div>
     </div>
 
-    <div id="image-modal" class="image-modal">
-        <img id="modal-image" src="" alt="拡大画像" />
+    <div id="image-modal" class="image-modal" style="display:none; pointer-events:none; position:fixed; left:0; top:0; width:100vw; height:100vh; z-index:2000; justify-content:center; align-items:center;">
+        <img id="modal-image" src="" alt="拡大画像" style="opacity:0; transition:opacity 0.4s; max-width:80vw; max-height:80vh; border-radius:8px; box-shadow:0 10px 30px rgba(0,0,0,0.25); background:transparent; pointer-events:auto; cursor:pointer;" />
     </div>
 
     <script>
@@ -434,21 +566,23 @@
 
         // Storage usage watcher
         function checkStorageSize() {
-            const data = localStorage.getItem('promptManagerData');
-            if (data) {
-                const sizeKB = (new Blob([data]).size / 1024).toFixed(1);
-                const maxSizeKB = 5 * 1024; // 5MB
-                const usagePercent = (sizeKB / maxSizeKB * 100).toFixed(1);
-                if (sizeKB > maxSizeKB * 0.8) {
-                    DOMElements.storageWarning.style.display = 'block';
-                    DOMElements.storageWarning.textContent = `ストレージ使用量: ${sizeKB}KB (${usagePercent}%) - 容量不足の可能性があります`;
-                    if (sizeKB > maxSizeKB * 0.9) {
-                        showNotification('データ容量が上限に近づいています。不要なデータを削除してください。', 'warning');
+            storage.get(['promptManagerData'], function(result) {
+                const data = result.promptManagerData;
+                if (data) {
+                    const sizeKB = (new Blob([data]).size / 1024).toFixed(1);
+                    const maxSizeKB = 5 * 1024; // 5MB
+                    const usagePercent = (sizeKB / maxSizeKB * 100).toFixed(1);
+                    if (sizeKB > maxSizeKB * 0.8) {
+                        DOMElements.storageWarning.style.display = 'block';
+                        DOMElements.storageWarning.textContent = `ストレージ使用量: ${sizeKB}KB (${usagePercent}%) - 容量不足の可能性があります`;
+                        if (sizeKB > maxSizeKB * 0.9) {
+                            showNotification('データ容量が上限に近づいています。不要なデータを削除してください。', 'warning');
+                        }
+                    } else {
+                        DOMElements.storageWarning.style.display = 'none';
                     }
-                } else {
-                    DOMElements.storageWarning.style.display = 'none';
                 }
-            }
+            });
         }
 
         function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 9); }
@@ -469,87 +603,94 @@
                 parts: state.parts,
                 templates: orderedTemplates,
             };
-            localStorage.setItem('promptManagerData', JSON.stringify(dataToSave));
-            localStorage.setItem('promptManagerCurrentPrompt', JSON.stringify(state.currentPrompt));
-            checkStorageSize();
+            storage.set({
+                promptManagerData: JSON.stringify(dataToSave),
+                promptManagerCurrentPrompt: JSON.stringify(state.currentPrompt)
+            }, checkStorageSize);
         }
 
         function loadData() {
-            const data = JSON.parse(localStorage.getItem('promptManagerData'));
-            const currentPrompt = JSON.parse(localStorage.getItem('promptManagerCurrentPrompt'));
-            if (data) {
-                state.parts = data.parts || [];
-                // テンプレートのキー順を統一
-                state.templates = (data.templates || []).map(t => ({
-                    id: t.id,
-                    name: t.name,
-                    prompt: t.prompt,
-                    translation: t.translation,
-                    desc: t.desc,
-                    thumbnail: t.thumbnail
-                }));
-                state.categories = data.categories || ['スタイル', 'キャラクター', '背景', '品質向上', 'ネガティブプロンプト', 'カテゴリなし'];
-                state.settings = data.settings || { translationApiUrl: '' };
-            }
-            if (state.parts.length === 0) state.parts = defaultParts;
-            if (currentPrompt) state.currentPrompt = currentPrompt;
-            DOMElements.translationApiUrlInput.value = state.settings.translationApiUrl;
-            state.isApiRegistered = !!state.settings.translationApiUrl;
+            storage.get(['promptManagerData', 'promptManagerCurrentPrompt'], function(result) {
+                const data = result.promptManagerData ? JSON.parse(result.promptManagerData) : null;
+                const currentPrompt = result.promptManagerCurrentPrompt ? JSON.parse(result.promptManagerCurrentPrompt) : null;
+                if (data) {
+                    state.parts = data.parts || [];
+                    // テンプレートのキー順を統一
+                    state.templates = (data.templates || []).map(t => ({
+                        id: t.id,
+                        name: t.name,
+                        prompt: t.prompt,
+                        translation: t.translation,
+                        desc: t.desc,
+                        thumbnail: t.thumbnail
+                    }));
+                    state.categories = data.categories || ['スタイル', 'キャラクター', '背景', '品質向上', 'ネガティブプロンプト', 'カテゴリなし'];
+                    state.settings = data.settings || { translationApiUrl: '' };
+                }
+                if (state.parts.length === 0) state.parts = defaultParts;
+                if (currentPrompt) state.currentPrompt = currentPrompt;
+                DOMElements.translationApiUrlInput.value = state.settings.translationApiUrl;
+                state.isApiRegistered = !!state.settings.translationApiUrl;
+            });
         }
 
         // JSON config management
         function loadJsonConfigs() {
-            const saved = localStorage.getItem('jsonConfigs');
-            if (saved) {
-                jsonConfigs = JSON.parse(saved);
-                // テンプレートのキー順を統一
-                jsonConfigs.forEach(cfg => {
-                    if (cfg.data && cfg.data.templates) {
-                        cfg.data.templates = cfg.data.templates.map(t => ({
-                            id: t.id,
-                            name: t.name,
-                            prompt: t.prompt,
-                            translation: t.translation,
-                            desc: t.desc,
-                            thumbnail: t.thumbnail
-                        }));
-                    }
-                });
-            } else {
-                // テンプレートのキー順を統一
-                const orderedTemplates = state.templates.map(t => ({
-                    id: t.id,
-                    name: t.name,
-                    prompt: t.prompt,
-                    translation: t.translation,
-                    desc: t.desc,
-                    thumbnail: t.thumbnail
-                }));
-                jsonConfigs = [{
-                    name: 'デフォルト',
-                    data: {
-                        settings: state.settings,
-                        categories: state.categories,
-                        parts: state.parts,
-                        templates: orderedTemplates,
-                    },
-                }];
-            }
-            const activeIndex = localStorage.getItem('activeConfigIndex');
-            if (activeIndex !== null) activeConfigIndex = parseInt(activeIndex);
-            if (jsonConfigs[activeConfigIndex]) {
-                const config = jsonConfigs[activeConfigIndex].data;
-                state.settings = config.settings || { translationApiUrl: '' };
-                state.categories = config.categories || ['スタイル', 'キャラクター', '背景', '品質向上', 'ネガティブプロンプト', 'カテゴリなし'];
-                state.parts = config.parts || defaultParts;
-                state.templates = config.templates || [];
-                DOMElements.translationApiUrlInput.value = state.settings.translationApiUrl;
-                state.isApiRegistered = !!state.settings.translationApiUrl;
-            }
+            storage.get(['jsonConfigs', 'activeConfigIndex'], function(result) {
+                const saved = result.jsonConfigs;
+                if (saved) {
+                    jsonConfigs = JSON.parse(saved);
+                    // テンプレートのキー順を統一
+                    jsonConfigs.forEach(cfg => {
+                        if (cfg.data && cfg.data.templates) {
+                            cfg.data.templates = cfg.data.templates.map(t => ({
+                                id: t.id,
+                                name: t.name,
+                                prompt: t.prompt,
+                                translation: t.translation,
+                                desc: t.desc,
+                                thumbnail: t.thumbnail
+                            }));
+                        }
+                    });
+                } else {
+                    // テンプレートのキー順を統一
+                    const orderedTemplates = state.templates.map(t => ({
+                        id: t.id,
+                        name: t.name,
+                        prompt: t.prompt,
+                        translation: t.translation,
+                        desc: t.desc,
+                        thumbnail: t.thumbnail
+                    }));
+                    jsonConfigs = [{
+                        name: 'デフォルト',
+                        data: {
+                            settings: state.settings,
+                            categories: state.categories,
+                            parts: state.parts,
+                            templates: orderedTemplates,
+                        },
+                    }];
+                }
+                const activeIndex = result.activeConfigIndex;
+                if (activeIndex !== undefined && activeIndex !== null) activeConfigIndex = parseInt(activeIndex);
+                if (jsonConfigs[activeConfigIndex]) {
+                    const config = jsonConfigs[activeConfigIndex].data;
+                    state.settings = config.settings || { translationApiUrl: '' };
+                    state.categories = config.categories || ['スタイル', 'キャラクター', '背景', '品質向上', 'ネガティブプロンプト', 'カテゴリなし'];
+                    state.parts = config.parts || defaultParts;
+                    state.templates = config.templates || [];
+                    DOMElements.translationApiUrlInput.value = state.settings.translationApiUrl;
+                    state.isApiRegistered = !!state.settings.translationApiUrl;
+                }
+            });
         }
         function saveJsonConfigs() {
-            localStorage.setItem('jsonConfigs', JSON.stringify(jsonConfigs));
-            localStorage.setItem('activeConfigIndex', activeConfigIndex.toString());
+            storage.set({
+                jsonConfigs: JSON.stringify(jsonConfigs),
+                activeConfigIndex: activeConfigIndex.toString()
+            });
         }
         function updateCurrentConfig() {
             if (jsonConfigs[activeConfigIndex]) {
@@ -612,7 +753,9 @@
                         canvas.width = width; canvas.height = height;
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
-                        const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                        // quality引数（デフォルト0.85）
+                        const quality = arguments.length > 2 ? arguments[2] / 100 : 0.85;
+                        const dataUrl = canvas.toDataURL('image/jpeg', quality);
                         resolve(dataUrl);
                     };
                     img.onerror = reject;
@@ -663,7 +806,7 @@
                                                 <div class="prompt-ja">${part.ja || '&nbsp;'}</div>
                                             </div>
                                             <button class="add-btn ${isSelected ? 'selected' : ''}" tabindex="-1">
-                                                ${isSelected ? '<svg class="icon-minus" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="7" width="10" height="2" rx="1" fill="yellow"/></svg>' : '+'}
+                                                ${isSelected ? '<svg class="icon-plus" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="7" y="3" width="2" height="10" rx="1" fill="yellow"/><rect x="3" y="7" width="10" height="2" rx="1" fill="yellow"/></svg>' : '+'}
                                             </button>
                                         </div>`;
                                 })
@@ -683,7 +826,7 @@
                     return `
                     <div class="card" data-index="${index}" draggable="true">
                         <input type="checkbox" class="bulk-part-checkbox" data-id="${part.id}" ${isSelected ? 'checked' : ''} style="margin-top: 4px;" />
-                        <div class="long-text-handler" style="flex:1;" data-full-text="${part.en}${part.ja ? ' / ' + part.ja : ''}">
+                        <div class="long-text-handler" style="flex:1;">
                             <div style="font-weight: 500;">${part.en.length > 50 ? part.en.substring(0, 50) + '...' : part.en}</div>
                             <div style="font-size: 12px; color: #666;">${part.ja ? (part.ja.length > 30 ? part.ja.substring(0, 30) + '...' : part.ja) : '翻訳文なし'}</div>
                         </div>
@@ -698,7 +841,7 @@
                 })
                 .join('');
             initializePartsDragAndDrop();
-            setupTooltips();
+            // ツールチップ表示を無効化（setupTooltips呼び出し削除）
         }
 
         function setupTooltips() {
@@ -813,9 +956,18 @@
                     const fullImageSrc = e.target.dataset.fullImage || e.target.src;
                     DOMElements.modalImage.src = fullImageSrc;
                     DOMElements.imageModal.style.display = 'flex';
+                    setTimeout(() => {
+                        DOMElements.modalImage.style.opacity = '1';
+                    }, 10);
                 }
             });
-            DOMElements.imageModal.addEventListener('click', () => { DOMElements.imageModal.style.display = 'none'; });
+            DOMElements.modalImage.addEventListener('click', () => {
+                DOMElements.modalImage.style.opacity = '0';
+                setTimeout(() => {
+                    DOMElements.imageModal.style.display = 'none';
+                    DOMElements.modalImage.src = '';
+                }, 400);
+            });
         }
 
         function initializeCategoryDragAndDrop() {
@@ -876,60 +1028,163 @@
         }
 
         function setupThumbnailHandlers() {
-            DOMElements.thumbnailPreview.addEventListener('click', () => { DOMElements.thumbnailUpload.click(); });
-            DOMElements.thumbnailUpload.addEventListener('change', async (e) => {
-                const file = e.target.files[0];
-                if (file && file.type.startsWith('image/')) {
+        // プロンプト作成画面用サムネイル
+        const creationThumbnailPreview = document.getElementById('creation-thumbnail-preview');
+        const creationThumbnailUpload = document.getElementById('creation-thumbnail-upload');
+        let creationThumbnailData = null;
+
+        // 画像選択クリック
+        creationThumbnailPreview.addEventListener('click', () => {
+            creationThumbnailUpload.click();
+        });
+        // ファイル選択
+        creationThumbnailUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                try {
+                    const resizedImage = await resizeImage(file, 600, 85);
+                    creationThumbnailPreview.style.backgroundImage = `url(${resizedImage})`;
+                    creationThumbnailPreview.classList.add('has-image');
+                    creationThumbnailPreview.textContent = '';
+                    creationThumbnailData = resizedImage;
+                } catch (error) {
+                    showNotification('画像の処理に失敗しました: ' + error.message, 'error');
+                }
+            }
+        });
+        // ドラッグ&ドロップ
+    function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
+            creationThumbnailPreview.addEventListener(eventName, preventDefaults, false);
+        });
+        ['dragenter', 'dragover'].forEach((eventName) => {
+            creationThumbnailPreview.addEventListener(eventName, () => {
+                creationThumbnailPreview.style.borderColor = 'var(--primary-color)';
+            }, false);
+        });
+        ['dragleave', 'drop'].forEach((eventName) => {
+            creationThumbnailPreview.addEventListener(eventName, () => {
+                creationThumbnailPreview.style.borderColor = 'var(--border-color)';
+            }, false);
+        });
+        creationThumbnailPreview.addEventListener('drop', async (e) => {
+            const dt = e.dataTransfer; const files = dt.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
                     try {
-                        const resizedImage = await resizeImage(file);
-                        DOMElements.thumbnailPreview.style.backgroundImage = `url(${resizedImage})`;
-                        DOMElements.thumbnailPreview.classList.add('has-image');
-                        DOMElements.thumbnailPreview.textContent = '画像を変更するにはクリック';
-                        const templateId = DOMElements.editingTemplateIdInput.value;
-                        if (templateId) {
-                            const template = state.templates.find((t) => t.id === templateId);
-                            if (template) {
-                                template.thumbnail = resizedImage;
-                                saveData(); updateCurrentConfig(); renderTemplates(DOMElements.templateSearchInput.value);
-                            }
-                        }
+                        const resizedImage = await resizeImage(file, 600, 85);
+                        creationThumbnailPreview.style.backgroundImage = `url(${resizedImage})`;
+                        creationThumbnailPreview.classList.add('has-image');
+                        creationThumbnailPreview.textContent = '';
+                        creationThumbnailData = resizedImage;
                     } catch (error) {
                         showNotification('画像の処理に失敗しました: ' + error.message, 'error');
                     }
                 }
-            });
-            DOMElements.clearThumbnailBtn.addEventListener('click', () => {
-                DOMElements.thumbnailPreview.style.backgroundImage = '';
-                DOMElements.thumbnailPreview.classList.remove('has-image');
-                DOMElements.thumbnailPreview.textContent = 'クリックして画像を選択';
-                const templateId = DOMElements.editingTemplateIdInput.value;
-                if (templateId) {
-                    const template = state.templates.find((t) => t.id === templateId);
-                    if (template) { template.thumbnail = null; saveData(); updateCurrentConfig(); renderTemplates(DOMElements.templateSearchInput.value); }
+            }
+        }, false);
+
+        // クリアボタン・保存ボタン時に画像消去
+        document.getElementById('clear-prompt-btn').addEventListener('click', () => {
+            creationThumbnailPreview.style.backgroundImage = '';
+            creationThumbnailPreview.classList.remove('has-image');
+            creationThumbnailPreview.textContent = '画像';
+            creationThumbnailData = null;
+        });
+        document.getElementById('save-template-btn').addEventListener('click', () => {
+            setTimeout(() => {
+                // プロンプトが空の場合は消さない
+                if (document.getElementById('prompt-input').value) {
+                    creationThumbnailPreview.style.backgroundImage = '';
+                    creationThumbnailPreview.classList.remove('has-image');
+                    creationThumbnailPreview.textContent = '画像';
+                    creationThumbnailData = null;
                 }
-            });
-            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => { DOMElements.thumbnailPreview.addEventListener(eventName, preventDefaults, false); });
-            function preventDefaults(e) { e.preventDefault(); e.stopPropagation(); }
-            ['dragenter', 'dragover'].forEach((eventName) => { DOMElements.thumbnailPreview.addEventListener(eventName, () => { DOMElements.thumbnailPreview.style.borderColor = 'var(--primary-color)'; }, false); });
-            ['dragleave', 'drop'].forEach((eventName) => { DOMElements.thumbnailPreview.addEventListener(eventName, () => { DOMElements.thumbnailPreview.style.borderColor = 'var(--border-color)'; }, false); });
-            DOMElements.thumbnailPreview.addEventListener('drop', async (e) => {
-                const dt = e.dataTransfer; const files = dt.files; if (files.length > 0) {
-                    const file = files[0]; if (file.type.startsWith('image/')) {
-                        try {
-                            const resizedImage = await resizeImage(file);
-                            DOMElements.thumbnailPreview.style.backgroundImage = `url(${resizedImage})`;
-                            DOMElements.thumbnailPreview.classList.add('has-image');
-                            DOMElements.thumbnailPreview.textContent = '画像を変更するにはクリック';
-                            const templateId = DOMElements.editingTemplateIdInput.value;
-                            if (templateId) {
-                                const template = state.templates.find((t) => t.id === templateId);
-                                if (template) { template.thumbnail = resizedImage; saveData(); updateCurrentConfig(); renderTemplates(DOMElements.templateSearchInput.value); }
-                            }
-                        } catch (error) { showNotification('画像の処理に失敗しました: ' + error.message, 'error'); }
+            }, 500); // 保存処理後に消去
+        });
+
+        // テンプレート保存時にサムネイルデータを渡す（既存保存処理に組み込み必要）
+        window.getCreationThumbnailData = () => creationThumbnailData;
+        // テンプレート編集画面用サムネイル
+        const editThumbnailPreview = document.getElementById('thumbnail-preview');
+        const editThumbnailUpload = document.getElementById('thumbnail-upload');
+        let editThumbnailData = null;
+
+        // 画像選択クリック
+        editThumbnailPreview.addEventListener('click', () => {
+            editThumbnailUpload.click();
+        });
+        // ファイル選択
+        editThumbnailUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                try {
+                    const resizedImage = await resizeImage(file, 600, 85);
+                    editThumbnailPreview.style.backgroundImage = `url(${resizedImage})`;
+                    editThumbnailPreview.classList.add('has-image');
+                    editThumbnailPreview.textContent = '画像を変更するにはクリック';
+                    editThumbnailData = resizedImage;
+                } catch (error) {
+                    showNotification('画像の処理に失敗しました: ' + error.message, 'error');
+                }
+            }
+        });
+        // ドラッグ&ドロップ
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventName) => {
+            editThumbnailPreview.addEventListener(eventName, preventDefaults, false);
+        });
+        ['dragenter', 'dragover'].forEach((eventName) => {
+            editThumbnailPreview.addEventListener(eventName, () => {
+                editThumbnailPreview.style.borderColor = 'var(--primary-color)';
+            }, false);
+        });
+        ['dragleave', 'drop'].forEach((eventName) => {
+            editThumbnailPreview.addEventListener(eventName, () => {
+                editThumbnailPreview.style.borderColor = 'var(--border-color)';
+            }, false);
+        });
+        editThumbnailPreview.addEventListener('drop', async (e) => {
+            const dt = e.dataTransfer; const files = dt.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.type.startsWith('image/')) {
+                    try {
+                        const resizedImage = await resizeImage(file, 600, 85);
+                        editThumbnailPreview.style.backgroundImage = `url(${resizedImage})`;
+                        editThumbnailPreview.classList.add('has-image');
+                        editThumbnailPreview.textContent = '画像を変更するにはクリック';
+                        editThumbnailData = resizedImage;
+                    } catch (error) {
+                        showNotification('画像の処理に失敗しました: ' + error.message, 'error');
                     }
                 }
-            }, false);
-        }
+            }
+        }, false);
+
+        // クリアボタン
+        document.getElementById('clear-thumbnail-btn').addEventListener('click', () => {
+            editThumbnailPreview.style.backgroundImage = '';
+            editThumbnailPreview.classList.remove('has-image');
+            editThumbnailPreview.textContent = 'クリックして画像を選択';
+            editThumbnailData = null;
+        });
+
+        // 保存ボタン時に画像消去（タイトルが空の場合は消さない）
+        document.getElementById('save-edited-template-btn').addEventListener('click', () => {
+            setTimeout(() => {
+                if (document.getElementById('template-title-input').value) {
+                    editThumbnailPreview.style.backgroundImage = '';
+                    editThumbnailPreview.classList.remove('has-image');
+                    editThumbnailPreview.textContent = 'クリックして画像を選択';
+                    editThumbnailData = null;
+                }
+            }, 500);
+        });
+
+        // テンプレート保存時にサムネイルデータを渡す（既存保存処理に組み込み必要）
+        window.getEditThumbnailData = () => editThumbnailData;
+    }
 
         async function testTranslationAPI(apiUrl) {
             const testText = 'API registration completed successfully.';
@@ -958,7 +1213,8 @@
                 tab.classList.add('active');
                 DOMElements.tabContents.forEach((c) => c.classList.remove('active'));
                 document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
-                if (tab.dataset.tab === 'creation') { state.categoryStates = {}; renderCategoriesAndParts(); }
+                // プロンプト作成画面に入るたびにカテゴリを閉じない
+                // if (tab.dataset.tab === 'creation') { state.categoryStates = {}; renderCategoriesAndParts(); }
             });
         });
 
@@ -979,6 +1235,7 @@
                 if (currentVal && !currentVal.endsWith(',')) { DOMElements.promptInput.value += ', '; }
                 DOMElements.promptInput.value += enText;
                 DOMElements.promptInput.dispatchEvent(new Event('input'));
+                updatePartsBasedTranslation(); // パーツ選択時のみ翻訳文を自動生成
                 renderCategoriesAndParts();
             }
         });
@@ -1047,7 +1304,8 @@
             });
             if (translations.length > 0) { const newTranslation = translations.join('、'); DOMElements.translationInput.value = newTranslation; state.currentPrompt.ja = newTranslation; }
         }
-        DOMElements.promptInput.addEventListener('input', () => { state.currentPrompt.en = DOMElements.promptInput.value; updatePartsBasedTranslation(); saveData(); });
+    // 直接入力時は翻訳文を自動生成しない
+    DOMElements.promptInput.addEventListener('input', () => { state.currentPrompt.en = DOMElements.promptInput.value; saveData(); });
         DOMElements.promptInput.addEventListener('keydown', (e) => {
             if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
                 e.preventDefault();
@@ -1062,7 +1320,8 @@
         DOMElements.copyPromptBtn.addEventListener('click', () => { navigator.clipboard.writeText(DOMElements.promptInput.value).then(() => { const originalText = DOMElements.copyPromptBtn.textContent; DOMElements.copyPromptBtn.textContent = 'コピー!'; setTimeout(() => (DOMElements.copyPromptBtn.textContent = originalText), 1500); }); });
         DOMElements.saveTemplateBtn.addEventListener('click', () => {
             if (!DOMElements.promptInput.value) { showNotification('プロンプトがありません。', 'error'); return; }
-            state.templates.unshift({ id: generateId(), name: '新しいテンプレート', desc: '', prompt: DOMElements.promptInput.value, translation: DOMElements.translationInput.value, thumbnail: null });
+            const thumbnail = window.getCreationThumbnailData ? window.getCreationThumbnailData() : null;
+            state.templates.unshift({ id: generateId(), name: '新しいテンプレート', desc: '', prompt: DOMElements.promptInput.value, translation: DOMElements.translationInput.value, thumbnail });
             saveData(); updateCurrentConfig(); renderTemplates(); showNotification('テンプレートを保存しました。');
         });
 
@@ -1126,12 +1385,14 @@
 
         // Export / Import
         DOMElements.exportDataBtn.addEventListener('click', () => {
-            const data = localStorage.getItem('promptManagerData') || JSON.stringify({});
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = 'prompt-manager-data.json'; a.click(); URL.revokeObjectURL(url);
-            showNotification('データをエクスポートしました。');
+            storage.get(['promptManagerData'], function(result) {
+                const data = result.promptManagerData || JSON.stringify({});
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = 'prompt-manager-data.json'; a.click(); URL.revokeObjectURL(url);
+                showNotification('データをエクスポートしました。');
+            });
         });
         DOMElements.importDataInput.addEventListener('change', (e) => {
             const file = e.target.files[0]; if (!file) return;
@@ -1140,8 +1401,9 @@
                 try {
                     const data = JSON.parse(ev.target.result);
                     if (confirm('現在のすべてのデータが上書きされます。よろしいですか？')) {
-                        localStorage.setItem('promptManagerData', JSON.stringify(data));
-                        location.reload();
+                        storage.set({ promptManagerData: JSON.stringify(data) }, function() {
+                            location.reload();
+                        });
                     }
                 } catch (error) { showNotification('ファイルの読み込みに失敗しました。', 'error'); }
             };
@@ -1255,11 +1517,12 @@
             const prompt = DOMElements.templatePromptInput.value;
             const translation = DOMElements.templateTranslationInput.value;
             if (!title) { showNotification('タイトルを入力してください。', 'error'); return; }
+            const thumbnail = window.getEditThumbnailData ? window.getEditThumbnailData() : null;
             if (id) {
                 const template = state.templates.find((t) => t.id === id);
-                if (template) { template.name = title; template.desc = desc; template.prompt = prompt; template.translation = translation; showNotification('テンプレートを更新しました。'); }
+                if (template) { template.name = title; template.desc = desc; template.prompt = prompt; template.translation = translation; template.thumbnail = thumbnail; showNotification('テンプレートを更新しました。'); }
             } else {
-                state.templates.unshift({ id: generateId(), name: title, desc, prompt, translation, thumbnail: null });
+                state.templates.unshift({ id: generateId(), name: title, desc, prompt, translation, thumbnail });
                 showNotification('テンプレートを作成しました。');
             }
             state.editingTemplateId = null;
@@ -1338,9 +1601,11 @@
 
         // Raw data editor modal
         DOMElements.editRawDataBtn.addEventListener('click', () => {
-            const prettyJson = JSON.stringify(JSON.parse(localStorage.getItem('promptManagerData') || '{}'), null, 2);
-            DOMElements.dataEditorTextarea.value = prettyJson;
-            DOMElements.dataEditorModal.style.display = 'flex';
+            storage.get(['promptManagerData'], function(result) {
+                const prettyJson = JSON.stringify(JSON.parse(result.promptManagerData || '{}'), null, 2);
+                DOMElements.dataEditorTextarea.value = prettyJson;
+                DOMElements.dataEditorModal.style.display = 'flex';
+            });
         });
         const closeModal = () => { DOMElements.dataEditorModal.style.display = 'none'; };
         DOMElements.closeDataEditorBtn.addEventListener('click', closeModal);
@@ -1361,8 +1626,9 @@
                     }));
                 }
                 if (confirm('現在のすべてのデータが上書きされます。よろしいですか？')) {
-                    localStorage.setItem('promptManagerData', JSON.stringify(parsedData));
-                    closeModal(); location.reload();
+                    storage.set({ promptManagerData: JSON.stringify(parsedData) }, function() {
+                        closeModal(); location.reload();
+                    });
                 }
             } catch (error) { showNotification('JSONの形式が正しくありません。\nエラー: ' + error.message, 'error'); }
         });
@@ -1394,19 +1660,28 @@
                 }));
                 jsonConfigs = [{ name: 'デフォルト', data: { settings: state.settings, categories: state.categories, parts: state.parts, templates: orderedTemplates } }];
                 activeConfigIndex = 0;
-                localStorage.removeItem('promptManagerData');
-                localStorage.removeItem('promptManagerCurrentPrompt');
-                saveJsonConfigs();
-                saveData();
-                renderAll();
-                showNotification('データを初期化しました。');
+                storage.remove(['promptManagerData', 'promptManagerCurrentPrompt'], function() {
+                    saveJsonConfigs();
+                    saveData();
+                    renderAll();
+                    showNotification('データを初期化しました。');
+                });
             }
         });
 
         function setupImageModalInit() { setupImageModal(); }
 
         // Init
-        function init() { loadJsonConfigs(); loadData(); renderAll(); setupThumbnailHandlers(); setupImageModalInit(); checkStorageSize(); }
+        function init() {
+            loadJsonConfigs();
+            loadData();
+            // 起動時のみ全カテゴリを閉じる
+            state.categoryStates = {};
+            renderAll();
+            setupThumbnailHandlers();
+            setupImageModalInit();
+            checkStorageSize();
+        }
         init();
     });
     </script>
