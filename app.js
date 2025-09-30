@@ -771,7 +771,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('clear-prompt-btn').addEventListener('click', () => {
             creationThumbnailPreview.style.backgroundImage = '';
             creationThumbnailPreview.classList.remove('has-image');
-            creationThumbnailPreview.textContent = '画像';
+            creationThumbnailPreview.textContent = 'サムネ';
             creationThumbnailData = null;
         });
         document.getElementById('save-template-btn').addEventListener('click', () => {
@@ -780,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (document.getElementById('prompt-input').value) {
                     creationThumbnailPreview.style.backgroundImage = '';
                     creationThumbnailPreview.classList.remove('has-image');
-                    creationThumbnailPreview.textContent = '画像';
+                    creationThumbnailPreview.textContent = 'サムネ';
                     creationThumbnailData = null;
                 }
             }, 500); // 保存処理後に消去
