@@ -4,19 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const launchWindowBtn = document.getElementById('launch-window');
     const launchTabBtn = document.getElementById('launch-tab');
     
-    // 別ウィンドウで開く
+    // 別ウィンドウで開く（background.js に依頼）
     launchWindowBtn.addEventListener('click', () => {
-        chrome.windows.create({
-            url: chrome.runtime.getURL('app.html'),
-            type: 'popup',
-            width: 915,
-            height: 700,
-            left: 100,
-            top: 100
-        });
+        chrome.runtime.sendMessage({ action: "openAppWindow" });
     });
     
-    // 新しいタブで開く
+    // 新しいタブで開く（直接タブを開いてOK）
     launchTabBtn.addEventListener('click', () => {
         chrome.tabs.create({
             url: chrome.runtime.getURL('app.html')

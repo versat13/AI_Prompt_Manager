@@ -42,8 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 e.clientX >= rect.right - threshold &&
                 e.clientY >= rect.bottom - threshold
             ) {
-                container.style.width = '1200px';
-                container.style.height = '850px';
+                container.style.width = '910px';
+                container.style.height = '750px';
             }
         });
     }

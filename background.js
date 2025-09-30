@@ -1,167 +1,88 @@
-// background.js - 複数翻訳API対応版
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'translate') {
-    const { apiUrl, text, apiType } = request;
+// ===== background.js - 複数翻訳API + app.htmlウィンドウ管理 =====
 
-    // APIタイプに応じてリクエストを構築
+let currentAppWindowId = null;
+
+// メッセージ受信
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+
+  // -------- 翻訳API処理 --------
+  if (request.action === 'translate' || request.action === 'testApi') {
+    const { apiUrl, text, apiType } = request;
+    const testText = text || 'Hello';
+
     let requestBody, headers, parseResponse;
 
     switch (apiType) {
       case 'libretranslate':
-        requestBody = JSON.stringify({
-          q: text,
-          source: 'en',
-          target: 'ja',
-          format: 'text'
-        });
+        requestBody = JSON.stringify({ q: testText, source: 'en', target: 'ja', format: 'text' });
         headers = { 'Content-Type': 'application/json' };
-        parseResponse = (data) => data.translatedText;
+        parseResponse = data => data.translatedText;
         break;
-
       case 'deepl':
-        // DeepL API形式
-        requestBody = JSON.stringify({
-          text: [text],
-          source_lang: 'EN',
-          target_lang: 'JA'
-        });
+        requestBody = JSON.stringify({ text: [testText], source_lang: 'EN', target_lang: 'JA' });
         headers = { 'Content-Type': 'application/json' };
-        parseResponse = (data) => data.translations[0].text;
+        parseResponse = data => data.translations[0].text;
         break;
-
       case 'gas':
-        // Google Apps Script形式
-        requestBody = JSON.stringify({
-          text: text,
-          source: 'en',
-          target: 'ja'
-        });
+        requestBody = JSON.stringify({ text: testText, source: 'en', target: 'ja' });
         headers = { 'Content-Type': 'application/json' };
-        parseResponse = (data) => data.translatedText || data.text || data.result;
+        parseResponse = data => data.translatedText || data.text || data.result;
         break;
-
       default:
-        // 汎用形式（自動判定）
-        requestBody = JSON.stringify({
-          text: text,
-          q: text,
-          source: 'en',
-          target: 'ja',
-          source_lang: 'EN',
-          target_lang: 'JA'
-        });
+        requestBody = JSON.stringify({ text: testText, q: testText, source: 'en', target: 'ja' });
         headers = { 'Content-Type': 'application/json' };
-        parseResponse = (data) => {
-          // 複数のフィールドを試す
-          return data.translatedText || 
-                 data.text || 
-                 data.result || 
-                 (data.translations && data.translations[0]?.text) ||
-                 JSON.stringify(data);
-        };
+        parseResponse = data => data.translatedText || data.text || data.result || (data.translations && data.translations[0]?.text) || '翻訳不可';
     }
 
-    fetch(apiUrl, {
-      method: 'POST',
-      headers: headers,
-      body: requestBody
-    })
-    .then(response => {
-      if (!response.ok) {
-        return response.text().then(text => {
-          throw new Error(`HTTP ${response.status}: ${text}`);
-        });
-      }
-      return response.json();
-    })
-    .then(data => {
-      const translation = parseResponse(data);
-      sendResponse({ success: true, translation });
-    })
-    .catch(error => {
-      sendResponse({ success: false, error: error.message });
-    });
+    fetch(apiUrl, { method: 'POST', headers, body: requestBody })
+      .then(response => response.ok ? response.json() : response.text().then(t => { throw new Error(`HTTP ${response.status}: ${t}`) }))
+      .then(data => sendResponse({ success: true, translation: parseResponse(data) }))
+      .catch(error => sendResponse({ success: false, error: error.message }));
 
-    return true; // 非同期応答を有効化
+    return true; // 非同期応答
   }
 
-  if (request.action === 'testApi') {
-    // テストリクエスト
-    const { apiUrl, apiType } = request;
-    const testText = 'Hello';
+  // -------- app.htmlウィンドウ処理 --------
+  if (request.action === 'openAppWindow') {
+    chrome.storage.local.get('appWindowBounds', (data) => {
+      const bounds = data.appWindowBounds || { width: 1200, height: 850, left: 100, top: 100 };
 
-    let requestBody, headers, parseResponse;
-
-    switch (apiType) {
-      case 'libretranslate':
-        requestBody = JSON.stringify({
-          q: testText,
-          source: 'en',
-          target: 'ja',
-          format: 'text'
-        });
-        headers = { 'Content-Type': 'application/json' };
-        parseResponse = (data) => data.translatedText;
-        break;
-
-      case 'deepl':
-        requestBody = JSON.stringify({
-          text: [testText],
-          source_lang: 'EN',
-          target_lang: 'JA'
-        });
-        headers = { 'Content-Type': 'application/json' };
-        parseResponse = (data) => data.translations[0].text;
-        break;
-
-      case 'gas':
-        requestBody = JSON.stringify({
-          text: testText,
-          source: 'en',
-          target: 'ja'
-        });
-        headers = { 'Content-Type': 'application/json' };
-        parseResponse = (data) => data.translatedText || data.text || data.result;
-        break;
-
-      default:
-        requestBody = JSON.stringify({
-          text: testText,
-          q: testText,
-          source: 'en',
-          target: 'ja'
-        });
-        headers = { 'Content-Type': 'application/json' };
-        parseResponse = (data) => {
-          return data.translatedText || 
-                 data.text || 
-                 data.result || 
-                 (data.translations && data.translations[0]?.text) ||
-                 'テスト成功（翻訳結果を取得できませんでした）';
-        };
-    }
-
-    fetch(apiUrl, {
-      method: 'POST',
-      headers: headers,
-      body: requestBody
-    })
-    .then(response => {
-      if (!response.ok) {
-        return response.text().then(text => {
-          throw new Error(`HTTP ${response.status}: ${text}`);
-        });
-      }
-      return response.json();
-    })
-    .then(data => {
-      const translation = parseResponse(data);
-      sendResponse({ success: true, translation });
-    })
-    .catch(error => {
-      sendResponse({ success: false, error: error.message });
+      chrome.windows.create({
+        url: 'app.html',
+        type: 'popup',
+        width: bounds.width,
+        height: bounds.height,
+        left: bounds.left,
+        top: bounds.top,
+      }, (win) => {
+        currentAppWindowId = win.id;
+      });
     });
 
     return true;
+  }
+});
+
+// ===== ウィンドウ位置・サイズの保存 =====
+chrome.windows.onBoundsChanged.addListener(win => {
+  if (win.id === currentAppWindowId) {
+    chrome.windows.get(win.id, w => {
+      if (chrome.runtime.lastError) return;
+      chrome.storage.local.set({
+        appWindowBounds: {
+          left: w.left,
+          top: w.top,
+          width: w.width,
+          height: w.height,
+        }
+      });
+    });
+  }
+});
+
+chrome.windows.onRemoved.addListener(winId => {
+  if (winId === currentAppWindowId) {
+    currentAppWindowId = null;
+    // 閉じたときは情報取得不可なので保存しない
   }
 });
