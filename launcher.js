@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 別ウィンドウで開く
     launchWindowBtn.addEventListener('click', () => {
         chrome.windows.create({
-            url: chrome.runtime.getURL('popup.html'),
+            url: chrome.runtime.getURL('app.html'),
             type: 'popup',
             width: 1200,
             height: 850,
@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 新しいタブで開く
     launchTabBtn.addEventListener('click', () => {
         chrome.tabs.create({
-            url: chrome.runtime.getURL('popup.html')
+            url: chrome.runtime.getURL('app.html')
         });
     });
 });

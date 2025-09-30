@@ -75,6 +75,27 @@ document.addEventListener('DOMContentLoaded', function () {
         { id: generateId(), en: 'a beautiful young woman', ja: '美しい若い女性', category: 'キャラクター' },
     ];
 
+// popup.js - ランチャー専用スクリプト
+document.addEventListener('DOMContentLoaded', () => {
+    const launchWindowBtn = document.getElementById('launch-window');
+    const launchTabBtn = document.getElementById('launch-tab');
+    
+    launchWindowBtn.addEventListener('click', () => {
+        chrome.windows.create({
+            url: chrome.runtime.getURL('main.html'),
+            type: 'popup',
+            width: 1200,
+            height: 850
+        });
+    });
+    
+    launchTabBtn.addEventListener('click', () => {
+        chrome.tabs.create({
+            url: chrome.runtime.getURL('main.html')
+        });
+    });
+});
+
     // Keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (e.ctrlKey || e.metaKey) {
@@ -273,45 +294,48 @@ document.addEventListener('DOMContentLoaded', function () {
         storage.get(['jsonConfigs', 'activeConfigIndex'], function (result) {
             const saved = result.jsonConfigs;
             if (saved) {
-                jsonConfigs = JSON.parse(saved);
-                // テンプレートのキー順を統一
-                jsonConfigs.forEach(cfg => {
-                    if (cfg.data && cfg.data.templates) {
-                        cfg.data.templates = cfg.data.templates.map(t => ({
-                            id: t.id,
-                            name: t.name,
-                            prompt: t.prompt,
-                            translation: t.translation,
-                            desc: t.desc,
-                            thumbnail: t.thumbnail
-                        }));
-                    }
-                });
+                try {
+                    jsonConfigs = JSON.parse(saved);
+                    // テンプレートのキー順を統一
+                    jsonConfigs.forEach(cfg => {
+                        if (cfg.data && cfg.data.templates) {
+                            cfg.data.templates = cfg.data.templates.map(t => ({
+                                id: t.id,
+                                name: t.name,
+                                prompt: t.prompt,
+                                translation: t.translation,
+                                desc: t.desc,
+                                thumbnail: t.thumbnail
+                            }));
+                        }
+                        // settingsにapiTypeが無い場合は追加
+                        if (cfg.data && cfg.data.settings && !cfg.data.settings.apiType) {
+                            cfg.data.settings.apiType = 'auto';
+                        }
+                    });
+                } catch (e) {
+                    console.error('jsonConfigs読み込みエラー:', e);
+                    // エラー時はデフォルトを作成
+                    jsonConfigs = createDefaultConfig();
+                }
             } else {
-                // テンプレートのキー順を統一
-                const orderedTemplates = state.templates.map(t => ({
-                    id: t.id,
-                    name: t.name,
-                    prompt: t.prompt,
-                    translation: t.translation,
-                    desc: t.desc,
-                    thumbnail: t.thumbnail
-                }));
-                jsonConfigs = [{
-                    name: 'デフォルト',
-                    data: {
-                        settings: state.settings,
-                        categories: state.categories,
-                        parts: state.parts,
-                        templates: orderedTemplates,
-                    },
-                }];
+                // 初回起動時
+                jsonConfigs = createDefaultConfig();
             }
+            
             const activeIndex = result.activeConfigIndex;
-            if (activeIndex !== undefined && activeIndex !== null) activeConfigIndex = parseInt(activeIndex);
+            if (activeIndex !== undefined && activeIndex !== null) {
+                activeConfigIndex = parseInt(activeIndex);
+            }
+            
+            // アクティブなConfigが存在しない場合は0にリセット
+            if (!jsonConfigs[activeConfigIndex]) {
+                activeConfigIndex = 0;
+            }
+            
             if (jsonConfigs[activeConfigIndex]) {
                 const config = jsonConfigs[activeConfigIndex].data;
-                state.settings = config.settings || { translationApiUrl: '' };
+                state.settings = config.settings || { translationApiUrl: '', apiType: 'auto' };
                 state.categories = config.categories || ['スタイル', 'キャラクター', '背景', '品質向上', 'ネガティブプロンプト', 'カテゴリなし'];
                 state.parts = config.parts || defaultParts;
                 state.templates = config.templates || [];
@@ -370,6 +394,30 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
+    function createDefaultConfig() {
+        const orderedTemplates = state.templates.map(t => ({
+            id: t.id,
+            name: t.name,
+            prompt: t.prompt,
+            translation: t.translation,
+            desc: t.desc,
+            thumbnail: t.thumbnail
+        }));
+        
+        return [{
+            name: 'デフォルト',
+            data: {
+                settings: { 
+                    translationApiUrl: '', 
+                    apiType: 'auto' 
+                },
+                categories: ['スタイル', 'キャラクター', '背景', '品質向上', 'ネガティブプロンプト', 'カテゴリなし'],
+                parts: defaultParts.map((p) => ({ ...p, id: generateId() })),
+                templates: orderedTemplates,
+            },
+        }];
+    }
+
 
     async function resizeImage(file, maxSize = 400) {
         return new Promise((resolve, reject) => {
@@ -1322,11 +1370,15 @@ document.addEventListener('DOMContentLoaded', function () {
     // Reset all data
     DOMElements.resetDataBtn.addEventListener('click', () => {
         if (confirm('すべてのデータが初期状態にリセットされます。\n（カテゴリ、パーツ、テンプレート、翻訳API）\nこの操作は元に戻せません。\n\n本当に実行しますか？')) {
+            // stateを初期化
             state = {
                 parts: defaultParts.map((p) => ({ ...p, id: generateId() })),
                 templates: [],
                 categories: ['スタイル', 'キャラクター', '背景', '品質向上', 'ネガティブプロンプト', 'カテゴリなし'],
-                settings: { translationApiUrl: '' },
+                settings: { 
+                    translationApiUrl: '',
+                    apiType: 'auto'
+                },
                 currentPrompt: { en: '', ja: '' },
                 categoryStates: {},
                 clickedPartIdsInSession: new Set(),
@@ -1335,7 +1387,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 editingTemplateId: null,
                 isApiRegistered: false,
             };
-            // テンプレートのキー順を統一
+            
+            // jsonConfigsも初期化
             const orderedTemplates = state.templates.map(t => ({
                 id: t.id,
                 name: t.name,
@@ -1344,28 +1397,56 @@ document.addEventListener('DOMContentLoaded', function () {
                 desc: t.desc,
                 thumbnail: t.thumbnail
             }));
-            jsonConfigs = [{ name: 'デフォルト', data: { settings: state.settings, categories: state.categories, parts: state.parts, templates: orderedTemplates } }];
+            
+            jsonConfigs = [{ 
+                name: 'デフォルト', 
+                data: { 
+                    settings: state.settings, 
+                    categories: state.categories, 
+                    parts: state.parts, 
+                    templates: orderedTemplates 
+                } 
+            }];
+            
             activeConfigIndex = 0;
-            storage.remove(['promptManagerData', 'promptManagerCurrentPrompt'], function () {
+            
+            // ストレージをクリア
+            storage.remove(['promptManagerData', 'promptManagerCurrentPrompt', 'jsonConfigs', 'activeConfigIndex'], function () {
+                // 初期化したデータを保存
                 saveJsonConfigs();
                 saveData();
+                
+                // UIを再描画
                 renderAll();
+                
+                // APIタイプボタンを更新
+                DOMElements.apiTypeButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.type === 'auto') {
+                        btn.classList.add('active');
+                    }
+                });
+                
                 showNotification('データを初期化しました。');
             });
         }
     });
+
 
     function setupImageModalInit() { setupImageModal(); }
 
     // Init
     function init() {
         loadJsonConfigs();
-        loadData();
-        state.categoryStates = {};
-        renderAll();
-        setupThumbnailHandlers();
-        setupImageModalInit();
-        checkStorageSize();
+        // loadJsonConfigsが非同期なので、少し待ってからloadDataを呼ぶ
+        setTimeout(() => {
+            loadData();
+            state.categoryStates = {};
+            renderAll();
+            setupThumbnailHandlers();
+            setupImageModalInit();
+            checkStorageSize();
+        }, 100);
     }
     init();
 });
