@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.windows.create({
             url: chrome.runtime.getURL('app.html'),
             type: 'popup',
-            width: 1200,
-            height: 850,
+            width: 915,
+            height: 700,
             left: 100,
             top: 100
         });
