@@ -114,7 +114,7 @@
 **翻訳API例：**
 - LibreTranslate（無料）: `https://libretranslate.de/translate`
 - DeepL API: 要アカウント登録
-- Google Apps Script: 独自エンドポイント（URL末尾がXXXX/execとなる）
+- Google Apps Script: 独自エンドポイント
 
 ### キーボードショートカット
 - `Ctrl+S` / `Cmd+S`: テンプレート保存
@@ -160,8 +160,8 @@
 
 ### 翻訳機能が動かない
 - API URLが正しいか確認
-- 「テスト」ボタンでAPI接続を確認
-- APIタイプが正しく選択されているか確認
+- テストボタンでAPI接続を確認
+- APIタイプが正しく選択されているか確認（Google GASだとURL末尾がXXXX/execとなります）
 
 ### ストレージ容量エラー
 - 設定画面でストレージ使用量を確認
