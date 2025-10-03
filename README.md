@@ -45,17 +45,14 @@
 - サムネイル画像も登録可能（ドラッグアンドドロップ対応、自動縮小リサイズ）
 - メモ機能により内容の把握がスムーズ
 
+<img width="1103" height="730" alt="スクリーンショット 2025-10-03 121715" src="https://github.com/user-attachments/assets/ca87eff0-0c47-4949-b152-bfe06dcebf93" />
 
 ### 翻訳API連携
 - **LibreTranslate**、**DeepL**、**Google Apps Script**に対応
 - プロンプトを日本語に自動翻訳
-- API URLを登録するだけで使用可能
-- 自動判定モードで複数APIに対応
+- API URLは各自で用意する必要があります
 
-### 💾 データセット切り替え
-複数のプロンプトセット（画像生成用、文章生成用など）を切り替えて管理できます。
-
-<img width="1103" height="730" alt="スクリーンショット 2025-10-03 121715" src="https://github.com/user-attachments/assets/ca87eff0-0c47-4949-b152-bfe06dcebf93" />
+### 💾 データセット切り替え機能
 
 **データセットの概念**
 
