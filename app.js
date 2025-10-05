@@ -71,7 +71,7 @@ function makeResizableHorizontal(element) {
     });
 }
 
-async function resizeImage(file, maxSize = 400, quality = 85) {
+async function resizeImage(file, maxSize = 500, quality = 70) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -96,7 +96,7 @@ async function resizeImage(file, maxSize = 400, quality = 85) {
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
 
-                const dataUrl = canvas.toDataURL('image/jpeg', quality / 100);
+                const dataUrl = canvas.toDataURL('image/webp', quality / 100);
                 resolve(dataUrl);
             };
             img.onerror = reject;
