@@ -11,97 +11,177 @@
             box-sizing: border-box;
         }
         body {
-            width: 320px;
-            padding: 24px;
+            width: 450px;
+            max-height: 600px;
+            padding: 20px;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #ffffff;
+            color: #1a1a1a;
         }
         .container {
             text-align: center;
         }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
         .icon {
-            font-size: 64px;
-            margin-bottom: 16px;
+            font-size: 24px;
         }
         h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 600;
-            margin-bottom: 8px;
+            color: #2d3748;
         }
-        .description {
-            font-size: 13px;
-            opacity: 0.9;
-            margin-bottom: 24px;
-            line-height: 1.5;
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
         }
         .launch-btn {
-            width: 100%;
+            flex: 1;
             padding: 14px;
-            background: white;
-            color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         .launch-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
         .launch-btn:active {
             transform: translateY(0);
         }
-        .options {
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.3);
-        }
         .option-btn {
-            width: 100%;
-            padding: 10px;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 6px;
-            font-size: 13px;
+            flex: 1;
+            padding: 12px;
+            background: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
             cursor: pointer;
             transition: all 0.2s;
-            margin-bottom: 8px;
         }
         .option-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: #edf2f7;
+            border-color: #cbd5e0;
         }
-        .shortcut-hint {
-            margin-top: 16px;
-            font-size: 11px;
+        
+        /* 作業中プロンプトエリア */
+        .working-section {
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #e2e8f0;
+            text-align: left;
+        }
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .icon-btn {
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 14px;
             opacity: 0.7;
-            line-height: 1.4;
+            transition: all 0.2s;
+            border-radius: 4px;
+        }
+        .icon-btn:hover {
+            opacity: 1;
+            background: #f7fafc;
+        }
+        .working-textarea {
+            width: 100%;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            max-height: 300px;
+            min-height: 80px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #2d3748;
+            font-family: inherit;
+            resize: none;
+            transition: all 0.2s;
+            overflow-y: auto;
+        }
+        .working-textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .working-textarea::placeholder {
+            color: #a0aec0;
+            font-style: italic;
+        }
+        .working-textarea::-webkit-scrollbar {
+            width: 6px;
+        }
+        .working-textarea::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 3px;
+        }
+        .working-textarea::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+        .char-count {
+            text-align: right;
+            font-size: 11px;
+            color: #a0aec0;
+            margin-top: 6px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="icon">🎨</div>
-        <h1>AI Prompt Manager</h1>
-        <p class="description">プロンプトを効率的に管理・作成</p>
+        <div class="header">
+            <div class="icon">🎨</div>
+            <h1>AI Prompt Manager</h1>
+        </div>
         
-        <button class="launch-btn" id="launch-window">
-            アプリを開く
-        </button>
-        
-        <div class="options">
+        <div class="button-group">
+            <button class="launch-btn" id="launch-window">
+                アプリを開く
+            </button>
+            
             <button class="option-btn" id="launch-tab">
                 新しいタブで開く
             </button>
         </div>
         
-        <div class="shortcut-hint">
-            💡 ヒント: 次回から直接開きたい場合は、<br>
-            開いたウィンドウをブックマークしてください
+        <!-- 作業中プロンプトエリア -->
+        <div class="working-section">
+            <div class="section-header">
+                <div class="section-title">作成中プロンプト表示</div>
+                <button class="icon-btn" id="copy-btn" title="コピー">📋</button>
+            </div>
+            <textarea 
+                class="working-textarea" 
+                id="working-textarea" 
+                placeholder="プロンプトを入力..."
+            ></textarea>
+            <div class="char-count" id="char-count">0文字</div>
         </div>
     </div>
     

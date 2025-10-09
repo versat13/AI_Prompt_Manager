@@ -71,7 +71,7 @@ function makeResizableHorizontal(element) {
     });
 }
 
-async function resizeImage(file, maxSize = 500, quality = 70) {
+async function resizeImage(file, maxSize = 500, quality = 50) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -1242,6 +1242,8 @@ document.addEventListener('DOMContentLoaded', function () {
     DOM.promptInput.addEventListener('input', () => {
         state.currentPrompt.en = DOM.promptInput.value;
         saveData();
+        // 作業中プロンプトを更新
+        storage.set({ workingPrompt: DOM.promptInput.value });
     });
 
     DOM.promptInput.addEventListener('keydown', (e) => {
@@ -1267,6 +1269,8 @@ document.addEventListener('DOMContentLoaded', function () {
         DOM.promptInput.value = '';
         DOM.translationInput.value = '';
         saveData();
+        // 作業中プロンプトもクリア
+        storage.set({ workingPrompt: '' });
         renderCategoriesAndParts();
     });
 
