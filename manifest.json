@@ -6,6 +6,14 @@
   "permissions": [
     "storage"
   ],
+  "host_permissions": [
+    "https://script.google.com/*",
+    "https://script.googleusercontent.com/*",
+    "https://libretranslate.de/*",
+    "https://*.libretranslate.com/*",
+    "https://api.deepl.com/*",
+    "https://api-free.deepl.com/*"
+  ],
   "background": {
     "service_worker": "background.js"
   },
