@@ -3,6 +3,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue.svg)](https://developer.chrome.com/docs/extensions/)
 
+Chromeウェブストア公開版
+https://chromewebstore.google.com/detail/ai-prompt-manager/enpbkcinnebkgebganhgaaoknjkmpbhp?authuser=0&hl=ja
+
 **AI用プロンプトをパーツ組み立てやテンプレート化して作成・管理するChrome拡張機能**
 
 - 画像生成AIやLLM向けのプロンプトをパーツやテンプレートとして登録して組み立てられます。  
