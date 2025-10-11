@@ -3,8 +3,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-blue.svg)](https://developer.chrome.com/docs/extensions/)
 
-Chromeウェブストア公開版
-https://chromewebstore.google.com/detail/ai-prompt-manager/enpbkcinnebkgebganhgaaoknjkmpbhp?authuser=0&hl=ja
 
 **AI用プロンプトをパーツ組み立てやテンプレート化して作成・管理するChrome拡張機能**
 
@@ -14,6 +12,9 @@ https://chromewebstore.google.com/detail/ai-prompt-manager/enpbkcinnebkgebganhga
 - 拡張機能アイコンから作成中プロンプトを即座に確認・コピー可能。  
 - 登録した翻訳文とは別にプロンプト全体の自動翻訳も可能（翻訳APIが必要です）。  
 <img width="1103" height="730" alt="スクリーンショット 2025-10-03 121321" src="https://github.com/user-attachments/assets/ebab6c5d-4297-42a0-9a48-31e927ac5eb0" />
+
+Chromeウェブストア公開版  
+https://chromewebstore.google.com/detail/ai-prompt-manager/enpbkcinnebkgebganhgaaoknjkmpbhp?authuser=0&hl=ja
 
 ---
 
