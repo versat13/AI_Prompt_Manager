@@ -14,8 +14,8 @@
 <img width="1103" height="730" alt="スクリーンショット 2025-10-03 121321" src="https://github.com/user-attachments/assets/ebab6c5d-4297-42a0-9a48-31e927ac5eb0" />
 
 Chromeウェブストア公開版  
-https://chromewebstore.google.com/detail/ai-prompt-manager/enpbkcinnebkgebganhgaaoknjkmpbhp?authuser=0&hl=ja
-
+[https://chromewebstore.google.com/detail/ai-prompt-manager/enpbkcinnebkgebganhgaaoknjkmpbhp?authuser=0&hl=ja
+](https://chromewebstore.google.com/detail/enpbkcinnebkgebganhgaaoknjkmpbhp?utm_source=item-share-cb)
 ---
 
 ## 主な機能
